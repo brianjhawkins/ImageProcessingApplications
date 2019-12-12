@@ -53,9 +53,11 @@ bool ZeroCrossing(Mat* m, int x, int y);
 int main()
 {
 	trackbar_slider = trackbar_slider_max / 2;
-	string imageLocation = "crackingacoldone.jpg";
+	//string imageLocation = "crackingacoldone.jpg";
+	string imageLocation = "fence.jpg";
 
 	initialImage = imread(samples::findFile(imageLocation), IMREAD_GRAYSCALE);
+	cout << initialImage.size << endl;
 
 	if (initialImage.empty()) {
 		cout << "Could not open or find the image" << endl;
@@ -129,19 +131,22 @@ void on_log_button_press(int, void*) {
 
 			for (int i = 0; i < filter.cols; i++) {
 				for (int j = 0; j < filter.rows; j++) {
-					result += filter.at<float>(i, j) * GetValue(&initialImage, x - operatorSize + i, y - operatorSize + j) / 255.0f;
+					int a = x - operatorSize + i;
+					int b = y - operatorSize + j;
+					result += GetValue(&filter, i, j) * GetValue(&initialImage, a, b) / 255.0f;
 				}
 			}
 
+			//cout << x << ", " << y << endl;
 			modifiedImage.at<float>(y, x) = result;
 		}
-	}	
+	}
 
 	// Zero-Crossing detection
 	for (int x = 0; x < modifiedImage.cols; x++) {
 		for (int y = 0; y < modifiedImage.rows; y++) {
 			int finalValue = 0;
-			float pixelValue = modifiedImage.at<float>(x, y);
+			float pixelValue = GetValue(&modifiedImage, x, y);
 			
 			// if pixel value approximately 0
 			if (pixelValue > -1 && pixelValue < 1) {
@@ -268,10 +273,10 @@ int LinearInterpolation(float x, float x0, float y0, float x1, float y1) {
 float GetValue(Mat* m, int x, int y) {
 	float value;
 
-	if (x < 0 || x >= m->rows) {
+	if (x < 0 || x >= m->cols) {
 		value = 0;
 	}
-	else if (y < 0 || y >= m->cols) {
+	else if (y < 0 || y >= m->rows) {
 		value = 0;
 	}
 	else {
