@@ -48,6 +48,7 @@ Mat combinedImage;
 Mat initialHistImage;
 Mat equalizedHistImage;
 
+// Histogram Settings
 int binWidth = 2;
 int histWidth = GRAY_LEVELS * binWidth;
 int histHeight = 400;
@@ -73,6 +74,7 @@ int main()
 	c_trackbar_slider = trackbar_slider_max;
 	d_trackbar_slider = trackbar_slider_max;	
 
+	// Initializes the two histograms to display
 	initialHistImage = Mat(histHeight, histWidth, IMREAD_GRAYSCALE);
 	equalizedHistImage = Mat(histHeight, histWidth, IMREAD_GRAYSCALE);
 
@@ -137,16 +139,18 @@ static void on_d_trackbar(int, void*) {
 
 // callback for when button is pressed, performs histogram equalization
 void on_button_press(int, void*) {	
+	// Sets all values in the histogram images to 0
 	initialHistImage = 0;
 	equalizedHistImage = 0;
 
-	// Clear values from arrays
+	// Clear values from arrays, set them all to 0
 	for (int i = 0; i < GRAY_LEVELS; i++) {
 		histogram[i] = 0;
 		equalizedHistogram[i] = 0;
 		q[i] = 0;
 	}
 
+	// Reset the histogram max values to 0
 	intialHistMax = 0;
 	equalizedHistMax = 0;
 
@@ -169,6 +173,7 @@ void on_button_press(int, void*) {
 		}
 	}
 
+	//Loop through the equalized histogram and determine what its max value is
 	for (int x = 0; x < initialImage.rows; x++) {
 		for (int y = 0; y < initialImage.cols; y++) {
 			if (equalizedHistogram[equalizedImage.at<uchar>(x, y)] > equalizedHistMax) {
@@ -177,8 +182,10 @@ void on_button_press(int, void*) {
 		}
 	}
 
+	// Determine which histogram has the largest max value
 	float max = (intialHistMax > equalizedHistMax) ? intialHistMax : equalizedHistMax;
 
+	// Draw lines on the histogram images, normalizing them based on the image height and the largest histogram max value
 	for (int i = 1; i < GRAY_LEVELS; i++) {
 		line(initialHistImage,
 			Point((binWidth * (i - 1)), histHeight - (histogram[i - 1] / max) * histHeight),
