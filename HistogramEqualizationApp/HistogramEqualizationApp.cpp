@@ -77,7 +77,8 @@ int main()
 	equalizedHistImage = Mat(histHeight, histWidth, IMREAD_GRAYSCALE);
 
 	// relative path to image location within project
-	string imageLocation = "crackingacoldone.jpg";
+	//string imageLocation = "crackingacoldone.jpg";
+	string imageLocation = "car.jpg";
 
 	// load in initial image
 	initialImage = imread(samples::findFile(imageLocation), IMREAD_GRAYSCALE);
@@ -140,9 +141,11 @@ void on_button_press(int, void*) {
 	equalizedHistImage = 0;
 
 	// Clear values from arrays
-	histogram[GRAY_LEVELS] = {};
-	equalizedHistogram[GRAY_LEVELS] = {};
-	q[GRAY_LEVELS] = {};
+	for (int i = 0; i < GRAY_LEVELS; i++) {
+		histogram[i] = 0;
+		equalizedHistogram[i] = 0;
+		q[i] = 0;
+	}
 
 	intialHistMax = 0;
 	equalizedHistMax = 0;
