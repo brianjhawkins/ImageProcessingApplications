@@ -1,7 +1,7 @@
 # ImageProcessingApplications
 Used OpenCV, Tensorflow, and Qt Libraries along with Google Colab to implement these programs. Not each project used all of the libraries, and more specific information is listed below for each program.
 
-# Binaryization
+# Binarization
 Libraries: OpenCV and Qt
 
 Simply takes an input image and applies a binarization to it. The threshold for binarization can be set by a trackbar.
